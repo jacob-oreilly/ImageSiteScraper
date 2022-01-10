@@ -15,8 +15,9 @@ namespace ImageSiteScraper.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private HashSet<string> urls = new HashSet<string>();
-        private List<FoundImageModel> foundImageList;
+        private static HashSet<string> urls = new HashSet<string>();
+        private static List<FoundImageModel> foundImageList = new List<FoundImageModel>();
+        private string rootUrl = "";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -28,15 +29,26 @@ namespace ImageSiteScraper.Controllers
             //Search first url
             //Once all links grabbed search next one on the list.
             //string url = "http://localhost:3000/";
-            string url = "https://reactjs.org/";
-            urls.Add(url);
+            string url = "https://www.cyotek.com/";
+
+            //urls.Add(url);
             HashSet<string>.Enumerator urlEnum = urls.GetEnumerator();
-            while (urlEnum.MoveNext()) {
-                var response = CallUrl(urlEnum.Current).Result;
-                var allLinks = GetHrefTags(response);
-                var allImageUrls = GetImgTags(response);
-            }
-           
+
+            Crawling(urls, url, 0, 20, url);
+
+            //while (urlEnum.MoveNext()) {
+
+            //}
+            //var response = CallUrl(url).Result;
+            //var allLinks = GetHrefTags(response, url);
+            //var allImageUrls = GetImgTags(response);
+            //var currentPageHashset = new HashSet<string>(urls);
+            //foreach (var currentItem in currentPageHashset) {
+            //    response = CallUrl(currentItem).Result;
+            //    allLinks = GetHrefTags(response, url, url);
+            //    allImageUrls = GetImgTags(response);
+            //}
+
             return View();
         }
 
@@ -56,10 +68,17 @@ namespace ImageSiteScraper.Controllers
             HttpClient client = new HttpClient();
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
             client.DefaultRequestHeaders.Accept.Clear();
-            var response = client.GetStringAsync(fullUrl);
-            return await response;
+            var response = client.GetAsync(fullUrl);
+            //var response = client.GetStringAsync(fullUrl);
+            if (response.Result.IsSuccessStatusCode)
+            {
+                return await response.Result.Content.ReadAsStringAsync();
+            }
+            else {
+                return "";
+            }
         }
-        public IEnumerable<string> GetHrefTags(string htmlString)
+        public static IEnumerable<string> GetHrefTags(string htmlString, string currentUrl, string rootUrl)
         {
             HtmlDocument htmlSnippet = new HtmlDocument();
             htmlSnippet.LoadHtml(htmlString);
@@ -71,7 +90,30 @@ namespace ImageSiteScraper.Controllers
                 foreach (HtmlNode link in htmlSnippet.DocumentNode.SelectNodes("//a[@href]"))
                 {
                     HtmlAttribute att = link.Attributes["href"];
-                    urls.Add(att.Value);
+                    if (!att.Value.Equals("/"))
+                    {
+                        if ((att.Value.Contains("https://") || att.Value.Contains("http://") || att.Value.Contains("www")) && !att.Value.Contains("rootUrl"))
+                        {
+                            return urls;
+                        }
+                        else if (!(att.Value.Contains("https://") || att.Value.Contains("http://") || att.Value.Contains("www")) && !att.Value.Contains(rootUrl))
+                        {
+                            if (!att.Value.StartsWith("/"))
+                            {
+                                urls.Add(rootUrl + "/" + att.Value);
+                            }
+                            else if (rootUrl.EndsWith("/")) {
+                                urls.Add(rootUrl + att.Value.Remove(0, 1));
+                            }
+                            else
+                            {
+                                urls.Add(rootUrl + att.Value);
+                            }
+                        }
+                    }
+                    //else {
+                    //    urls.Add(att.Value);
+                    //}
                     hrefTags.Add(att.Value);
                 }
             }
@@ -79,7 +121,7 @@ namespace ImageSiteScraper.Controllers
             return urls;
         }
 
-        public IEnumerable<string> GetImgTags(string htmlString)
+        public static IEnumerable<string> GetImgTags(string htmlString)
         {
             HtmlDocument htmlSnippet = new HtmlDocument();
             htmlSnippet.LoadHtml(htmlString);
@@ -95,6 +137,23 @@ namespace ImageSiteScraper.Controllers
                 }
             }
             return hrefTags;
+        }
+
+        public static void Crawling(HashSet<string> siteUrls, string currentUrl, int currentCrawlDepth, int maxCrawlDepth, string rootUrl) {
+            var response = CallUrl(currentUrl).Result;
+            var allLinks = GetHrefTags(response, currentUrl, rootUrl);
+            var allImageUrls = GetImgTags(response);
+            //Add images and links associate with the images into the imagelistobject.
+            var currentPageHashset = new HashSet<string>(siteUrls);
+            if (currentCrawlDepth < maxCrawlDepth) {
+                var count = 0;
+                foreach (var url in currentPageHashset) {
+                    if (currentCrawlDepth.Equals(count)) {
+                        Crawling(siteUrls, url, currentCrawlDepth + 1, maxCrawlDepth, rootUrl);
+                    }
+                    count++;
+                }
+            }
         }
     }
 }
