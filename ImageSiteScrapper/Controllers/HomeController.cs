@@ -15,6 +15,8 @@ namespace ImageSiteScraper.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private HashSet<string> urls = new HashSet<string>();
+        private List<FoundImageModel> foundImageList;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -23,10 +25,18 @@ namespace ImageSiteScraper.Controllers
 
         public IActionResult Index()
         {
-            string url = "https://en.wikipedia.org/wiki/Main_Page";
-            var response = CallUrl(url).Result;
-            var allLinks = GetHrefTags(response);
-            var allImageUrls = GetImgTags(response);
+            //Search first url
+            //Once all links grabbed search next one on the list.
+            //string url = "http://localhost:3000/";
+            string url = "https://reactjs.org/";
+            urls.Add(url);
+            HashSet<string>.Enumerator urlEnum = urls.GetEnumerator();
+            while (urlEnum.MoveNext()) {
+                var response = CallUrl(urlEnum.Current).Result;
+                var allLinks = GetHrefTags(response);
+                var allImageUrls = GetImgTags(response);
+            }
+           
             return View();
         }
 
@@ -55,14 +65,18 @@ namespace ImageSiteScraper.Controllers
             htmlSnippet.LoadHtml(htmlString);
 
             List<string> hrefTags = new List<string>();
-
-            foreach (HtmlNode link in htmlSnippet.DocumentNode.SelectNodes("//a[@href]"))
+            var aHrefList = htmlSnippet.DocumentNode.SelectNodes("//a[@href]");
+            if (aHrefList != null)
             {
-                HtmlAttribute att = link.Attributes["href"];
-                hrefTags.Add(att.Value);
+                foreach (HtmlNode link in htmlSnippet.DocumentNode.SelectNodes("//a[@href]"))
+                {
+                    HtmlAttribute att = link.Attributes["href"];
+                    urls.Add(att.Value);
+                    hrefTags.Add(att.Value);
+                }
             }
 
-            return hrefTags;
+            return urls;
         }
 
         public IEnumerable<string> GetImgTags(string htmlString)
@@ -71,13 +85,15 @@ namespace ImageSiteScraper.Controllers
             htmlSnippet.LoadHtml(htmlString);
 
             List<string> hrefTags = new List<string>();
-
-            foreach (HtmlNode link in htmlSnippet.DocumentNode.SelectNodes("//img[@src]"))
+            var imageTagList = htmlSnippet.DocumentNode.SelectNodes("//img[@src]");
+            if (imageTagList != null)
             {
-                HtmlAttribute att = link.Attributes["src"];
-                hrefTags.Add(att.Value);
+                foreach (HtmlNode link in imageTagList)
+                {
+                    HtmlAttribute att = link.Attributes["src"];
+                    hrefTags.Add(att.Value);
+                }
             }
-
             return hrefTags;
         }
     }

@@ -69,23 +69,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Jacob\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\jaket\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
+      "projectUniqueName": "C:\\Users\\jaket\\code\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
       "projectName": "ImageSiteScraper",
-      "projectPath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
-      "packagesPath": "C:\\Users\\Jacob\\.nuget\\packages\\",
-      "outputPath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\obj\\",
+      "projectPath": "C:\\Users\\jaket\\code\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
+      "packagesPath": "C:\\Users\\jaket\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jaket\\code\\ImageSiteScraper\\ImageSiteScrapper\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Jacob\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jaket\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -97,6 +93,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -108,6 +105,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "HtmlAgilityPack": {
             "target": "Package",
@@ -132,7 +130,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
