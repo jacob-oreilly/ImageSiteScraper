@@ -1,8 +1,22 @@
-﻿@{
+﻿@model IEnumerable<FoundImageModel>
+@{
     ViewData["Title"] = "Home Page";
+    var Images = ViewData["FoundImages"] as FoundImageModel;
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <ul>
+        @foreach (var imageModel in Model)
+        {
+            <li>@imageModel.imageUrl</li>
+            <ul>
+                @foreach (var existOnUrl in imageModel.existsOnUrls)
+                {
+                    <li>@existOnUrl</li>
+                }
+            </ul>
+
+        }
+    </ul>
 </div>

@@ -48,8 +48,8 @@ namespace ImageSiteScraper.Controllers
             //    allLinks = GetHrefTags(response, url, url);
             //    allImageUrls = GetImgTags(response);
             //}
-
-            return View();
+            ViewData["FoundImages"] = foundImageList;
+            return View(foundImageList);
         }
 
         public IActionResult Privacy()
@@ -121,7 +121,7 @@ namespace ImageSiteScraper.Controllers
             return urls;
         }
 
-        public static IEnumerable<string> GetImgTags(string htmlString)
+        public static IEnumerable<string> GetImgTags(string htmlString, string currentUrl)
         {
             HtmlDocument htmlSnippet = new HtmlDocument();
             htmlSnippet.LoadHtml(htmlString);
@@ -133,6 +133,25 @@ namespace ImageSiteScraper.Controllers
                 foreach (HtmlNode link in imageTagList)
                 {
                     HtmlAttribute att = link.Attributes["src"];
+                    var existingFoundImage = foundImageList.FirstOrDefault(x => x.imageUrl == att.Value);
+                    if (existingFoundImage != null)
+                    {
+
+                        var existingUrl = existingFoundImage.existsOnUrls.FirstOrDefault(x => x == currentUrl);
+                        if (String.IsNullOrEmpty(existingUrl))
+                        {
+                            existingFoundImage.existsOnUrls.Add(currentUrl);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        FoundImageModel currentFoundImage = new FoundImageModel();
+                        currentFoundImage.imageUrl = att.Value;
+                        currentFoundImage.existsOnUrls = new List<string>();
+                        currentFoundImage.existsOnUrls.Add(currentUrl);
+                        foundImageList.Add(currentFoundImage);
+                    }
                     hrefTags.Add(att.Value);
                 }
             }
@@ -142,7 +161,7 @@ namespace ImageSiteScraper.Controllers
         public static void Crawling(HashSet<string> siteUrls, string currentUrl, int currentCrawlDepth, int maxCrawlDepth, string rootUrl) {
             var response = CallUrl(currentUrl).Result;
             var allLinks = GetHrefTags(response, currentUrl, rootUrl);
-            var allImageUrls = GetImgTags(response);
+            var allImageUrls = GetImgTags(response, currentUrl);
             //Add images and links associate with the images into the imagelistobject.
             var currentPageHashset = new HashSet<string>(siteUrls);
             if (currentCrawlDepth < maxCrawlDepth) {
