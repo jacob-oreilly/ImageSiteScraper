@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JnodrAxz+5Ekq7Kb1veSerQXKvJGe/V3KmaEFrHpl8bw1N5ADlIQ7Ohu6/TbhGScidzyCmsV6ugENqOhTi2xrA==",
+  "dgSpecHash": "PbVtvFMGi82lkDo9ohz9uiq5liRilMcPU6c0dgksvdL9m2oKAKJZSfbdqGdjAglcKHssHt2kA1KZpxD86nltlA==",
   "success": true,
-  "projectFilePath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
+  "projectFilePath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraperMVC.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jacob\\.nuget\\packages\\htmlagilitypack\\1.11.39\\htmlagilitypack.1.11.39.nupkg.sha512"
   ],

@@ -75,9 +75,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
+      "projectUniqueName": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraperMVC.csproj",
       "projectName": "ImageSiteScraper",
-      "projectPath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraper.csproj",
+      "projectPath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\ImageSiteScraperMVC.csproj",
       "packagesPath": "C:\\Users\\Jacob\\.nuget\\packages\\",
       "outputPath": "E:\\code2022\\ImageSiteScraper\\ImageSiteScrapper\\obj\\",
       "projectStyle": "PackageReference",

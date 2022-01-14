@@ -12,14 +12,14 @@ using HtmlAgilityPack;
 
 namespace ImageSiteScraper.Controllers
 {
-    public class HomeController : Controller
+    public class SearchFormController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<SearchFormController> _logger;
         private static HashSet<string> urls = new HashSet<string>();
         private static List<FoundImageModel> foundImageList = new List<FoundImageModel>();
         private string rootUrl = "";
 
-        public HomeController(ILogger<HomeController> logger)
+        public SearchFormController(ILogger<SearchFormController> logger)
         {
             _logger = logger;
         }
@@ -35,19 +35,6 @@ namespace ImageSiteScraper.Controllers
             HashSet<string>.Enumerator urlEnum = urls.GetEnumerator();
 
             Crawling(urls, url, 0, 20, url);
-
-            //while (urlEnum.MoveNext()) {
-
-            //}
-            //var response = CallUrl(url).Result;
-            //var allLinks = GetHrefTags(response, url);
-            //var allImageUrls = GetImgTags(response);
-            //var currentPageHashset = new HashSet<string>(urls);
-            //foreach (var currentItem in currentPageHashset) {
-            //    response = CallUrl(currentItem).Result;
-            //    allLinks = GetHrefTags(response, url, url);
-            //    allImageUrls = GetImgTags(response);
-            //}
             ViewData["FoundImages"] = foundImageList;
             return View(foundImageList);
         }

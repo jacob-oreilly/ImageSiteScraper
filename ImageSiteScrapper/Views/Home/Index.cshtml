@@ -4,8 +4,13 @@
     var Images = ViewData["FoundImages"] as FoundImageModel;
 }
 
+@{
+    var scrapeUrl = ViewData["scrapeUrl"] as SearchFormModel;
+}
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Crawl url for images</h1>
+    
     <ul>
         @foreach (var imageModel in Model)
         {
